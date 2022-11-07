@@ -22,7 +22,7 @@ public class InterceptorUtil {
         return new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                Log.w(TAG, "log: " + message);
+                Log.w(TAG, "netLog: " + message);
             }
         }).setLevel(HttpLoggingInterceptor.Level.BODY);//设置打印数据的级别
     }

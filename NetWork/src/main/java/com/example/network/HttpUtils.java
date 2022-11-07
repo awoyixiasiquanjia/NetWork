@@ -11,6 +11,16 @@ import java.util.Map;
 
 public class HttpUtils  implements Iexecutor {
 
+    private static  String BaseUrl;
+
+    public static String getBaseUrl() {
+        return BaseUrl;
+    }
+
+    public static void setBaseUrl(String baseUrl) {
+        BaseUrl = baseUrl;
+    }
+
     private RealExecutor mIexecutor;
 
     private HttpUtils() {

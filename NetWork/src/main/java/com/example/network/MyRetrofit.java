@@ -21,7 +21,7 @@ public class MyRetrofit extends RealExecutor {
         Retrofit mRetrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(getOkHttpClient()).baseUrl("https://test.readingpro.cn/readingpro-java/").build();
+                .client(getOkHttpClient()).baseUrl(HttpUtils.getBaseUrl()).build();
          mNetApi = mRetrofit.create(NetApi.class);
     }
 
