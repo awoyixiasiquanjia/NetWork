@@ -14,8 +14,4 @@ public class RetrofitExecutor extends RealExecutor{
           MyRetrofit.getInstance().doPost(url,maps,cls,callback);
     }
 
-    @Override
-    public void setShowLoading(boolean isShow) {
-        MyRetrofit.getInstance().setShowLoading(isShow);
-    }
 }
