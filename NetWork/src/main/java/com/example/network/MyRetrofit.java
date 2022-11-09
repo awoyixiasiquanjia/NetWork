@@ -21,7 +21,7 @@ public class MyRetrofit extends RealExecutor {
         Retrofit mRetrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(getOkHttpClient()).baseUrl(HttpUtils.getBaseUrl()).build();
+                .client(getOkHttpClient()).baseUrl(NetWorkAppliction.getBaseUrl()).build();
          mNetApi = mRetrofit.create(NetApi.class);
     }
 
@@ -39,12 +39,12 @@ public class MyRetrofit extends RealExecutor {
     }
 
     @Override
-    public <T extends BaseResponseBean> void doGet(String url, Map<String, Object> maps, Class<T> cls, Callback<T> callback) {
+    public <T extends BaseResponseBean> void doGet(String url, Map<String, Object> maps, Class<T> cls, NetCallBack<T> callback) {
         request(mNetApi.getDynamicData(url),cls,callback);
     }
 
     @Override
-    public <T extends BaseResponseBean> void doPost(String url, Map<String, Object> maps, Class<T> cls, Callback<T> callback) {
+    public <T extends BaseResponseBean> void doPost(String url, Map<String, Object> maps, Class<T> cls, NetCallBack<T> callback) {
         request( mNetApi.postDynamicData(url,maps),cls,callback);
     }
 
@@ -57,7 +57,7 @@ public class MyRetrofit extends RealExecutor {
     }
 
 
-    private <T extends BaseResponseBean> void request(Observable observable, Class<T> cls, Callback<T> callback){
+    private <T extends BaseResponseBean> void request(Observable observable, Class<T> cls, NetCallBack<T> callback){
         //这里可以放一个无网返回
         Objects.requireNonNull(cls,"cls  cannot null!!");
         observable.
@@ -67,8 +67,8 @@ public class MyRetrofit extends RealExecutor {
 
             @Override
             protected void onRequestStart() {
-                 if (isShowLoading()){
-                     showProgressDialog();
+                 if (callback!=null){
+                     callback.onRequestStart();
                  }
             }
 
@@ -80,18 +80,23 @@ public class MyRetrofit extends RealExecutor {
             }
 
             @Override
-            protected void onFailure(Throwable e, boolean isNetWorkError) {
+            protected void onFailure(String e) {
+                if (callback!=null){
+                    callback.onFailure(e);
+                }
 
             }
-        });
+
+            @Override
+            protected void onRequestEnd() {
+                super.onRequestEnd();
+                if (callback!=null){
+                    callback.onRequestEnd();
+                }
+           }
+                });
 
     }
-
-
-    public void showProgressDialog() {
-    }
-
-
 
 
 }

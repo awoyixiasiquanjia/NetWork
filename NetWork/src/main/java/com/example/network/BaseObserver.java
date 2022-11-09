@@ -1,18 +1,22 @@
 package com.example.network;
 
-import android.accounts.NetworkErrorException;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 
 import org.json.JSONObject;
 
 import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.SSLHandshakeException;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
+import retrofit2.HttpException;
 
 public abstract class BaseObserver implements Observer<ResponseBody> {
 
@@ -42,16 +46,28 @@ public abstract class BaseObserver implements Observer<ResponseBody> {
     public void onError(Throwable e) {
         onRequestEnd();
         try {
-            if (e instanceof ConnectException
-                    || e instanceof TimeoutException
-                    || e instanceof NetworkErrorException
-                    || e instanceof UnknownHostException) {
-                onFailure(e, true);
+            if (e instanceof SocketTimeoutException||e instanceof ConnectException) {
+                onFailure("网络连接超时");
+                Toast.makeText(NetWorkAppliction.getAppContext(),"网络连接超时",Toast.LENGTH_SHORT).show();
+            }  else if (e instanceof SSLHandshakeException) {
+                onFailure("安全证书异常");
+                Toast.makeText(NetWorkAppliction.getAppContext(),"安全证书异常",Toast.LENGTH_SHORT).show();
+            } else if (e instanceof HttpException) {
+                onFailure("error:" + e.getMessage());
+                Toast.makeText(NetWorkAppliction.getAppContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+            } else if (e instanceof UnknownHostException) {
+                onFailure("网络异常，请检查您的网络状态");
+                Toast.makeText(NetWorkAppliction.getAppContext(),"网络异常，请检查您的网络状态",Toast.LENGTH_SHORT).show();
             } else {
-                onFailure(e, false);
+                onFailure(("error:" + e.getMessage()));
+                Toast.makeText(NetWorkAppliction.getAppContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (Exception e2) {
+            onFailure("网络异常，请检查您的网络状态");
+            Toast.makeText(NetWorkAppliction.getAppContext(),"网络异常，请检查您的网络状态",Toast.LENGTH_SHORT).show();
+            e2.printStackTrace();
+        } finally {
+            Log.w(InterceptorUtil.TAG, "netLog: " + e.getMessage());
         }
     }
 
@@ -69,7 +85,7 @@ public abstract class BaseObserver implements Observer<ResponseBody> {
 
     protected abstract void onSuccees(String ret);
 
-    protected abstract void onFailure(Throwable e, boolean isNetWorkError) throws Exception;
+    protected abstract void onFailure(String msg);
 
     //对应后台的code码的处理
     @CallSuper

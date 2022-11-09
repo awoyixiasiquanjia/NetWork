@@ -4,6 +4,10 @@ public interface Callback<T> {
 
     void onResponse(T response);
 
-    void onFailure(Throwable e);
+    void onFailure(String msg);
+
+    void onRequestStart();
+
+    void onRequestEnd();
 
 }

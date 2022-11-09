@@ -11,16 +11,6 @@ import java.util.Map;
 
 public class HttpUtils  implements Iexecutor {
 
-    private static  String BaseUrl;
-
-    public static String getBaseUrl() {
-        return BaseUrl;
-    }
-
-    public static void setBaseUrl(String baseUrl) {
-        BaseUrl = baseUrl;
-    }
-
     private RealExecutor mIexecutor;
 
     private HttpUtils() {
@@ -31,18 +21,13 @@ public class HttpUtils  implements Iexecutor {
       return  InnerClass.getHttpUtils();
     }
 
-    public HttpUtils setShowLoading(boolean isShow){
-        mIexecutor.setShowLoading(isShow);
-        return InnerClass.mHttpUtils;
-    }
-
     @Override
-    public <T extends BaseResponseBean> void doGet(String url, Map<String, Object> maps, Class<T> cls,Callback<T> callback) {
+    public <T extends BaseResponseBean> void doGet(String url, Map<String, Object> maps, Class<T> cls,NetCallBack<T> callback) {
         mIexecutor.doGet(url,maps,cls,callback);
     }
 
     @Override
-    public <T extends BaseResponseBean> void doPost(String url, Map<String, Object> maps, Class<T> cls, Callback<T> callback) {
+    public <T extends BaseResponseBean> void doPost(String url, Map<String, Object> maps, Class<T> cls, NetCallBack<T> callback) {
         mIexecutor.doPost(url,maps,cls,callback);
     }
 
