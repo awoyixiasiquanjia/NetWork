@@ -6,14 +6,13 @@ import java.util.Objects;
 
 public class NetWorkAppliction {
     private static Context mAppContext;
-    private static String baseUrl;
+    private static String mbaseUrl;
 
     public static void init(Application appContext,String baseUrl) {
         Objects.requireNonNull(appContext,"appContext not null!");
         Objects.requireNonNull(baseUrl,"baseUrl not null!");
-        if(mAppContext == null) {
-            mAppContext = appContext;
-        }
+        mAppContext = appContext.getApplicationContext();
+        mbaseUrl = baseUrl;
     }
 
     public static Context getAppContext() {
@@ -21,6 +20,6 @@ public class NetWorkAppliction {
     }
 
     public static String getBaseUrl(){
-        return baseUrl;
+        return mbaseUrl;
     }
 }
