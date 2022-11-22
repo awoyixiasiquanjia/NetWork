@@ -33,7 +33,7 @@ public class InterceptorUtil {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 //修改请求头
-                Request request = chain.request().newBuilder().addHeader("accessToken","16655613634921DDEpMnYrc").build();
+                Request request = chain.request().newBuilder().addHeader("accessToken",NetWorkSPUtil.getInstance().getString(Constant.USER_ACCESS_TOKEN)).build();
                 return chain.proceed(request);
             }
         };
