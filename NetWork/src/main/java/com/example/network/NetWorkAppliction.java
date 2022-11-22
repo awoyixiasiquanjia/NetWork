@@ -13,6 +13,7 @@ public class NetWorkAppliction {
         Objects.requireNonNull(baseUrl,"baseUrl not null!");
         mAppContext = appContext.getApplicationContext();
         mbaseUrl = baseUrl;
+        NetWorkSPUtil.init(appContext,"config",appContext.MODE_PRIVATE);
     }
 
     public static Context getAppContext() {
