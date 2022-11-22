@@ -364,6 +364,10 @@ public class NetWorkSPUtil {
         putString(context,Constant.USER_ACCESS_TOKEN,value);
     }
 
+    public String getToken(){
+        return getString(Constant.USER_ACCESS_TOKEN);
+    }
+
     public NetWorkSPUtil remove(String key) {
         editor.remove(key);
         editor.commit();
